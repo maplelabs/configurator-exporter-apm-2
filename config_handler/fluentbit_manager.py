@@ -323,10 +323,9 @@ class FluentbitPluginManager:
         for x_plugin in self.c_plugins:
             par = x_plugin.get('parser')
             plu = x_plugin.get('plugin')
-            name = x_plugin.get('name')
-            collection_type = x_plugin.get('collection_type')
-            if not collection_type:
-                collection_type = 'logger'
+            #name = x_plugin.get('name')
+            #collection_type = x_plugin.get('collection_type')
+            #field_discovery = x_plugin.get('field_discovery')
             if par:
                 parser_obj = read_parser(par)
                 if parser_obj:
@@ -335,9 +334,15 @@ class FluentbitPluginManager:
                 plugin_obj = read_config(plu)
                 if plugin_obj:
                     self.logger.info(str(plugin_obj))
-                    self.build_custom_plugin(plugin_obj,name,collection_type)
+                    self.build_custom_plugin(plugin_obj,x_plugin)
 
-    def build_custom_plugin(self,data,name,collection_type):
+    def build_custom_plugin(self,data,plugin):
+        name = plugin.get('name')
+        collection_type = plugin.get('collection_type')
+        field_discovery = plugin.get('field_discovery','')
+        if not collection_type:
+            collection_type = 'logger'
+
         lines = ['[INPUT]']
         for key, val in data.get('input', {}).iteritems():
             lines.append('    ' + str(key) + ' ' + str(val))
@@ -347,6 +352,15 @@ class FluentbitPluginManager:
             for key, val in filter.iteritems():
                 lines.append('    ' + str(key) + ' ' + str(val))
             lines.append('')
+
+        if field_discovery == 'On':
+            lines.append('[FILTER]')
+            lines.append('    ' + 'Name' + ' lua')
+            lines.append('    ' + 'Match' + ' ' + name)
+            lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
+            lines.append('    ' + 'call' + ' ' + 'defaultdiscovery')
+            lines.append('')
+
         lines.append('[FILTER]')
         lines.append('    ' + 'Name' + ' record_modifier')
         lines.append('    ' + 'Match' + ' ' + name)
