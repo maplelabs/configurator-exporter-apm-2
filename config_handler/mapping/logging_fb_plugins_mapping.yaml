@@ -1,0 +1,153 @@
+nginx-error:
+  conf:
+    Refresh_Interval: 10
+    Mem_Buf_Limit: 20MB
+  input:
+    Name: tail
+    Path: "/var/log/nginx/error.log"
+    Parser: nginx-error
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/nginx-error.sqlite"
+  filters:
+  - Name: parser
+    Key_Name: log
+    Parser: nginx-error
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: nginx
+    _documentType: nginxErrorLogs
+  functions:
+  - nginx_error_transform
+nginx-access:
+  input:
+    Name: tail
+    Path: "/var/log/nginx/access.log"
+    Parser: nginx-access
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/nginx-access.sqlite"
+  filters:
+  - Name: parser
+    Key_Name: log
+    Parser: nginx-access
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: nginx
+    _documentType: nginxAccessLogs
+  functions:
+  - access_parsing
+mysql-error:
+  input:
+    Name: tail
+    Path: "/var/log/mysql/error.log"
+    Parser: "mysql-error"
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/mysql-error.sqlite"
+  filters:
+  - Name: parser
+    Key_Name: log
+    Parser: mysql-error
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: mysql
+    _documentType: mysqlErrorLogs
+  functions:
+  - mysql_error_transform
+mysql-general:
+  input:
+    Name: tail
+    Path: "/var/log/mysql/mysql.log"
+    Parser: "mysql-general"
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/mysql-general.sqlite"
+  filters:
+  - Name: parser
+    Key_Name: log
+    Parser: mysql-general
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: mysql
+    _documentType: mysqlAccessLogs
+    message: ''
+mysql-slowquery:
+  collection_type: metric
+  input:
+    Name: tail
+    Path: "/var/lib/mysql/*slow.log"
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/mysql-slowquery.sqlite"
+    Multiline: On
+    Parser_Firstline: mysql-slowquery
+  filters:
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: mysql
+    _documentType: mysqlSlowQueryLogs
+  functions:
+  - mysql_slowquery_parsing
+apache-error:
+  input:
+    Name: tail
+    Path: "/var/log/apache2/error.log"
+    Parser: apache-error
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/apache-error.sqlite"
+  filters:
+  - Name: parser
+    Key_Name: log
+    Parser: apache-error
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: apache
+    _documentType: apacheErrorLogs
+  functions:
+  - apache_error_transform
+apache-access:
+  collection_type: metric
+  input:
+    Name: tail
+    Path: "/var/log/apache2/access.log"
+    Parser: "apache-access"
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/apache-access.sqlite"
+  filters:
+  - Name: parser
+    Key_Name: log
+    Parser: apache-access
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: apache
+    _documentType: apacheAccessLogs
+  functions:
+  - access_parsing
+linux-syslog:
+  conf:
+    Refresh_Interval: 1
+    Mem_Buf_Limit: 5MB
+  input:
+    Name: tail
+    Path: "/var/log/messages"
+    Parser: "linux-syslog"
+    Buffer_Chunk_Size: "1MB"
+    Buffer_Max_Size: "5MB"
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/linux-syslog.sqlite"
+  filters:
+  - Name: parser
+    Key_Name: log
+    Parser: linux-syslog
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: linux
+    _documentType: syslog
+  functions:
+  - syslog_parsing
+  - syslog_transform
+postgres-general:
+  collection_type: metric
+  input:
+    Name: tail
+    Path: "/var/lib/pgsql/9.6/data/pg_log/postgresql*.log"
+    Parser: postgres-general
+    DB: "/opt/sfapm/td-agent-bit/etc/td-agent-bit/postgres-general.sqlite"
+  filters:
+  - Name: parser
+    Key_Name: log
+    Parser: postgres-general
+  transform:
+    node: "${HOSTNAME}"
+    _plugin: postgres
+    _documentType: postgresLogs
+  functions:
+  - postgres_general_transform
