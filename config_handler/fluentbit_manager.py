@@ -342,6 +342,7 @@ class FluentbitPluginManager:
         name = plugin.get('name')
         collection_type = plugin.get('collection_type')
         field_discovery = plugin.get('field_discovery','')
+        offset = plugin.get('add_offset','')
         if not collection_type:
             collection_type = 'logger'
 
@@ -367,7 +368,10 @@ class FluentbitPluginManager:
         lines.append('    ' + 'Name' + ' lua')
         lines.append('    ' + 'Match' + ' ' + name)
         lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
-        lines.append('    ' + 'call' + ' ' + 'add_time')
+        if offset == 'On':
+            lines.append('    ' + 'call' + ' ' + 'addtimeGMToffset_millisecond')
+        else:
+            lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
         lines.append('')
 
         lines.append('[FILTER]')
