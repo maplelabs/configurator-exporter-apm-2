@@ -195,12 +195,12 @@ class FluentbitPluginManager:
             lines.append('')
 
         #adding timestamp
-        #lines.append('[FILTER]')
-        #lines.append('    ' + 'Name' + ' lua')
-        #lines.append('    ' + 'Match' + ' ' + str(data.get('name','')))
-        #lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
-        #lines.append('    ' + 'call' + ' ' + 'add_time')
-        #lines.append('')
+        lines.append('[FILTER]')
+        lines.append('    ' + 'Name' + ' lua')
+        lines.append('    ' + 'Match' + ' ' + str(data.get('name','')))
+        lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
+        lines.append('    ' + 'call' + ' ' + 'add_time')
+        lines.append('')
 
         #adding timestamp
         
@@ -251,7 +251,8 @@ class FluentbitPluginManager:
                         lines.append('    ' + 'tls' + ' On')
                         lines.append('    ' + 'tls.verify' + ' Off')
                     lines.append('    ' + 'Type' + ' ' + DOCUMENT)
-                    lines.append('    ' + 'Time_Key' + ' ' + 'time')
+                    #if plugin_name != "linux-syslog":
+                    #   lines.append('    ' + 'Time_Key' + ' ' + 'time')
                     lines.append('')
 
         filename = self.plugin_path + os.path.sep + data.get('name') +'.conf'
@@ -285,6 +286,7 @@ class FluentbitPluginManager:
             lines.append('[PARSER]')
             for key, val in par.iteritems():
                 lines.append('    ' + str(key) + ' ' + str(val))
+            lines.append('    ' + "Time_Key" + ' ' + "On")
             lines.append('')
         filename = self.plugin_path + os.path.sep + 'parsers.conf'
         self.plugin_post_data.append((filename, '\n'.join(lines)))
@@ -362,12 +364,20 @@ class FluentbitPluginManager:
             lines.append('')
 
         lines.append('[FILTER]')
+        lines.append('    ' + 'Name' + ' lua')
+        lines.append('    ' + 'Match' + ' ' + name)
+        lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
+        lines.append('    ' + 'call' + ' ' + 'add_time')
+        lines.append('')
+
+        lines.append('[FILTER]')
         lines.append('    ' + 'Name' + ' record_modifier')
         lines.append('    ' + 'Match' + ' ' + name)
         if self.tags:
             for tag_key, tag_val in self.tags.items():
                 lines.append('    ' + 'Record'+ ' ' +'_tag_' + str(tag_key) + ' ' + str(tag_val))
         lines.append('    ' + 'Record'+ ' ' + '_documentType'+ ' ' + name)
+        lines.append('    ' + 'Record'+ ' ' + '_plugin'+ ' ' + name)
         lines.append('')
 
         for x_targets in self.targets:
@@ -392,7 +402,7 @@ class FluentbitPluginManager:
                         output_dict['tls.verify'] = 'Off'
                     output_dict['Type'] = DOCUMENT
                     output_dict['Match'] = str(name)
-                    output_dict['Time_Key'] = 'time'
+                    #output_dict['Time_Key'] = 'time'
  
                     for key, val in output_dict.iteritems():
                         lines.append('    ' + str(key) + ' ' + str(val))

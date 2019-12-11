@@ -97,6 +97,7 @@ def read_parser(filepath):
         except:
             logger.error("Unexpected line",line)
         continue
+    output.append(out)
     filep.close()
     return output
 
