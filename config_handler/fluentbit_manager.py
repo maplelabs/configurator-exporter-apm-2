@@ -286,7 +286,7 @@ class FluentbitPluginManager:
             lines.append('[PARSER]')
             for key, val in par.iteritems():
                 lines.append('    ' + str(key) + ' ' + str(val))
-            lines.append('    ' + "Time_Key" + ' ' + "On")
+            lines.append('    ' + "Time_Keep" + ' ' + "On")
             lines.append('')
         filename = self.plugin_path + os.path.sep + 'parsers.conf'
         self.plugin_post_data.append((filename, '\n'.join(lines)))
