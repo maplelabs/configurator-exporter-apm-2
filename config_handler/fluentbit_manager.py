@@ -199,7 +199,7 @@ class FluentbitPluginManager:
         lines.append('    ' + 'Name' + ' lua')
         lines.append('    ' + 'Match' + ' ' + str(data.get('name','')))
         lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
-        lines.append('    ' + 'call' + ' ' + 'add_time')
+        lines.append('    ' + 'call' + ' ' + 'addtimeGMToffset_millisecond')
         lines.append('')
 
         #adding timestamp
@@ -245,13 +245,13 @@ class FluentbitPluginManager:
                     if x_targets.get('username',''):
                         lines.append('    ' + 'HTTP_User' + ' ' + str(x_targets.get('username','')))
                     if x_targets.get('password',''):
-                    	password = x_targets.get('password','')
+                        password = x_targets.get('password','')
                         lines.append('    ' + 'HTTP_Passwd' + ' ' + str(password))
                     if x_targets.get('protocol','') and x_targets.get('protocol','') == 'https':
                         lines.append('    ' + 'tls' + ' On')
                         lines.append('    ' + 'tls.verify' + ' Off')
                     lines.append('    ' + 'Type' + ' ' + DOCUMENT)
-                    #if plugin_name != "linux-syslog":
+            #if plugin_name != "linux-syslog":
                     #   lines.append('    ' + 'Time_Key' + ' ' + 'time')
                     lines.append('')
 
@@ -342,6 +342,8 @@ class FluentbitPluginManager:
         name = plugin.get('name')
         collection_type = plugin.get('collection_type')
         field_discovery = plugin.get('field_discovery','')
+        numberfields = plugin.get('number_fields','')
+        stringfields = plugin.get('string_fields','')
         offset = plugin.get('add_offset','')
         if not collection_type:
             collection_type = 'logger'
@@ -356,6 +358,25 @@ class FluentbitPluginManager:
                 lines.append('    ' + str(key) + ' ' + str(val))
             lines.append('')
 
+        lines.append('[FILTER]')
+        lines.append('    ' + 'Name' + ' lua')
+        lines.append('    ' + 'Match' + ' ' + name)
+        lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
+        if offset == 'On':
+            lines.append('    ' + 'call' + ' ' + 'addtimeGMToffset_millisecond')
+        else:
+            lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
+        lines.append('')
+
+        lines.append('[FILTER]')
+        lines.append('    ' + 'Name' + ' record_modifier')
+        lines.append('    ' + 'Match' + ' ' + name)
+        if numberfields:
+            lines.append('    ' + 'Record'+ ' ' + 'numberfields'+ ' ' + str(numberfields))
+        if stringfields:
+            lines.append('    ' + 'Record'+ ' ' + 'stringfields'+ ' ' + str(stringfields))
+        lines.append('')
+
         if field_discovery == 'On':
             lines.append('[FILTER]')
             lines.append('    ' + 'Name' + ' lua')
@@ -368,10 +389,7 @@ class FluentbitPluginManager:
         lines.append('    ' + 'Name' + ' lua')
         lines.append('    ' + 'Match' + ' ' + name)
         lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
-        if offset == 'On':
-            lines.append('    ' + 'call' + ' ' + 'addtimeGMToffset_millisecond')
-        else:
-            lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
+        lines.append('    ' + 'call' + ' ' + 'defaultextraction')
         lines.append('')
 
         lines.append('[FILTER]')
@@ -396,7 +414,7 @@ class FluentbitPluginManager:
                     if x_targets.get('username',''):
                         output_dict['HTTP_User'] = str(x_targets.get('username',''))
                     if x_targets.get('password',''):
-                    	password = x_targets.get('password','')
+                        password = x_targets.get('password','')
                         output_dict['HTTP_Passwd'] = str(password)
                     output_dict['Buffer_Size'] = '2MB'
                     # output_dict['Retry_Limit'] = 'False'
