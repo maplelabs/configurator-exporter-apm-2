@@ -10,7 +10,7 @@
 ### END INIT INFO
 
 dir="/opt/sfapm/configurator-exporter"
-cmd="python api_server.py"
+cmd="/opt/sfapm/sfapm-venv/bin/python api_server.py"
 user=""
 
 name=`basename $0`
