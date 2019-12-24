@@ -9,7 +9,7 @@
 # Description:       Enable service provided by daemon.
 ### END INIT INFO
 
-dir="/opt/configurator-exporter"
+dir="/opt/sfapm/configurator-exporter"
 cmd="python api_server.py"
 user=""
 
