@@ -206,7 +206,7 @@ def get_service_status(service_name):
     # result = {COLLECTD_STATUS: None, VERSION: None}
     # command = "service " + service_name + " status"
     # command = ' service collectd status'.split()
-    if PlatformOS == 'redhat' and PlatformVersion < 7:
+    if PlatformOS in ['centos', 'redhat'] and PlatformVersion < 7:
         command = "service " + service_name + " status"
     else:
         command = "systemctl status {0}.service".format(service_name)
@@ -233,7 +233,7 @@ def start_service(service_name):
     # command = ' service collectd status'.split()
     # out, err = run_shell_command(command)
     # print command
-    if PlatformOS == 'redhat' and PlatformVersion < 7:
+    if PlatformOS in ['centos', 'redhat'] and PlatformVersion < 7:
         command = "service " + service_name + " start"
     else:
         command = "systemctl start {0}.service".format(service_name)
@@ -242,7 +242,7 @@ def start_service(service_name):
 
 def stop_service(service_name):
     # command = "service " + service_name + " stop"
-    if PlatformOS == 'redhat' and PlatformVersion < 7:
+    if PlatformOS in ['centos', 'redhat'] and PlatformVersion < 7:
         command = "service " + service_name + " stop"
     else:
         command = "systemctl stop {0}.service".format(service_name)
@@ -251,7 +251,7 @@ def stop_service(service_name):
 
 def restart_service(service_name):
     # command = "service " + service_name + " restart"
-    if PlatformOS == 'redhat' and PlatformVersion < 7:
+    if PlatformOS in ['centos', 'redhat'] and PlatformVersion < 7:
         command = "service " + service_name + " restart"
     else:
         command = "systemctl restart {0}.service".format(service_name)
