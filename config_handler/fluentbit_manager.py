@@ -344,6 +344,7 @@ class FluentbitPluginManager:
         field_discovery = plugin.get('field_discovery','')
         numberfields = plugin.get('number_fields','')
         stringfields = plugin.get('string_fields','')
+        timefields = plugin.get('time_fields','')
         offset = plugin.get('add_offset','')
         if not collection_type:
             collection_type = 'logger'
@@ -375,6 +376,8 @@ class FluentbitPluginManager:
             lines.append('    ' + 'Record'+ ' ' + 'numberfields'+ ' ' + str(numberfields))
         if stringfields:
             lines.append('    ' + 'Record'+ ' ' + 'stringfields'+ ' ' + str(stringfields))
+        if timefields:
+            lines.append('    ' + 'Record'+ ' ' + 'timefields'+ ' ' + str(timefields))
         lines.append('')
 
         if field_discovery == 'On':
