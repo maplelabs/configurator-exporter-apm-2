@@ -8,6 +8,7 @@
 import json
 import logging
 import os
+import platform
 from subprocess import Popen, PIPE, STDOUT
 import yaml
 import signal
@@ -24,6 +25,8 @@ FluentbitConfigurationFilePath = 'mapping/fluentbit_config_mapping.yaml'
 FluentdPluginMappingFilePath = 'mapping/logging_plugins_mapping.yaml'
 FluentbitPluginMappingFilePath = 'mapping/logging_fb_plugins_mapping.yaml'
 TargetMappingFilePath = 'mapping/targets_mapping.yaml'
+PlatformOS = platform.dist()[0].lower()
+PlatformVersion = float(platform.dist()[1])
 
 def format_response(count, data=None, error=None):
     if data is None:
@@ -203,7 +206,10 @@ def get_service_status(service_name):
     # result = {COLLECTD_STATUS: None, VERSION: None}
     # command = "service " + service_name + " status"
     # command = ' service collectd status'.split()
-    command = "systemctl status {0}.service".format(service_name)
+    if PlatformOS == 'redhat' and PlatformVersion < 7:
+        command = "service " + service_name + " status"
+    else:
+        command = "systemctl status {0}.service".format(service_name)
     out, err = run_shell_command(command)
     if err:
         return -1
@@ -227,19 +233,28 @@ def start_service(service_name):
     # command = ' service collectd status'.split()
     # out, err = run_shell_command(command)
     # print command
-    command = "systemctl start {0}.service".format(service_name)
+    if PlatformOS == 'redhat' and PlatformVersion < 7:
+        command = "service " + service_name + " start"
+    else:
+        command = "systemctl start {0}.service".format(service_name)
     return run_shell_command(command)
 
 
 def stop_service(service_name):
     # command = "service " + service_name + " stop"
-    command = "systemctl stop {0}.service".format(service_name)
+    if PlatformOS == 'redhat' and PlatformVersion < 7:
+        command = "service " + service_name + " stop"
+    else:
+        command = "systemctl stop {0}.service".format(service_name)
     return run_shell_command(command)
 
 
 def restart_service(service_name):
     # command = "service " + service_name + " restart"
-    command = "systemctl restart {0}.service".format(service_name)
+    if PlatformOS == 'redhat' and PlatformVersion < 7:
+        command = "service " + service_name + " restart"
+    else:
+        command = "systemctl restart {0}.service".format(service_name)
     return run_shell_command(command)
 
 
