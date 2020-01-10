@@ -236,6 +236,7 @@ class FluentbitPluginManager:
                     lines.append('[OUTPUT]')
                     lines.append('    ' + 'Name' + ' es')
                     lines.append('    ' + 'Match' + ' ' + str(data.get('name','')))
+                    lines.append('    ' + 'Buffer_Size' + ' ' + ' 2MB')
                     if x_targets.get('host',''):
                         lines.append('    ' + 'Host' + ' ' + str(x_targets.get('host','')))
                     if x_targets.get('port',''):
