@@ -119,6 +119,55 @@ libvirt:
 # - name: libvirt_disk
 #   interval: 10
 
+#mapping for Mongo
+mongod:
+- config:
+  - Mandatory: true
+    dataType: string
+    defaultValue: root
+    fieldName: user
+    label: Username
+    max: ''
+    min: ''
+    tooltip: Username for Mongo server
+  - Mandatory: true
+    dataType: password
+    defaultValue: maplelabs
+    fieldName: password
+    label: Password
+    max: ''
+    min: ''
+    tooltip: Password for Mongo server
+  - Mandatory: true
+    dataType: string
+    defaultValue: '27017'
+    fieldName: port
+    label: Port
+    max: ''
+    min: ''
+    tooltip: port in which mongod service is exposed on localhost
+  - Mandatory: true
+    dataType: list
+    defaultValue:
+    - serverDetails
+    - tableDetails
+    - databaseDetails
+    fieldName: documentsTypes
+    label: DocumentsTypes
+    max: ''
+    min: ''
+    multiselect: true
+    options:
+    - label: serverDetails
+      value: serverDetails
+    - label: tableDetails
+      value: tableDetails
+    - label: databaseDetails
+      value: databaseDetails
+    tooltip: document Types to be collected
+  interval: 300
+  name: mongod
+
 # mapping for mysql plugin
 mysql:
  - name: mysql

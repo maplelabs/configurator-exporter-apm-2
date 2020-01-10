@@ -139,7 +139,7 @@ def get_stats_dir():
 #     return data
 
 def get_data(num_samples=1, plugins=None, plugin_instances=None):
-    multi_plugins = ["linux", "redisdb", "mysql", "jvm", "tpcc", "tomcat", "haproxy", "elasticsearchagent", "postgres", "oozie","yarn","namenode","kafkatopic", "kafkajmx", "zookeeperjmx", "apache", "topstats", "nginx", "nginxplus", "cassandra", "hxconnect", "esalogstore", "spark"]
+    multi_plugins = ["linux", "redisdb", "mysql", "jvm", "tpcc", "tomcat", "haproxy", "elasticsearchagent", "postgres", "oozie","yarn","namenode","kafkatopic", "kafkajmx", "zookeeperjmx", "apache", "topstats", "nginx", "nginxplus", "cassandra", "hxconnect", "esalogstore", "spark", "mongod"]
     if plugin_instances is None:
         plugin_instances = [ALL]
     if plugins is None:
