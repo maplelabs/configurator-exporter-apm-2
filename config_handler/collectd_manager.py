@@ -248,6 +248,10 @@ class CollectdManager:
                                 del plugin_temp[CONFIG_DATA]
                             # Propulate TARGETS ,INTERVAL,TAGS in each plugin
                             plugin_temp[TARGETS] = target_names_list
+
+                            if INTERVAL in profile:
+                                plugin_temp[INTERVAL] = profile[INTERVAL]
+
                             if INTERVAL not in plugin_temp:
                                 plugin_temp[INTERVAL] = self.interval
                             plugin_temp[TAGS] = self.tag_list

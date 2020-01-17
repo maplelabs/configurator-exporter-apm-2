@@ -542,6 +542,14 @@ topstats:
  - name: topstats
    interval: 10
    config:
+   - label: Number of processes to list
+     fieldName: maximum_grep
+     tooltip: Number of processes to list
+     Mandatory: true
+     dataType: Integer
+     defaultValue: 5
+     min: ''
+     max: ''
    - label: Resource
      fieldName: resource
      tooltip: Utilization type based on which top command result is grepped
