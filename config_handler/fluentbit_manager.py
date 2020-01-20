@@ -347,11 +347,14 @@ class FluentbitPluginManager:
         stringfields = plugin.get('string_fields','')
         timefields = plugin.get('time_fields','')
         offset = plugin.get('add_offset','')
+        logpath = plugin.get('log_path','')
         if not collection_type:
             collection_type = 'logger'
 
         lines = ['[INPUT]']
         for key, val in data.get('input', {}).iteritems():
+            if logpath and key == 'Path':
+                val = logpath
             lines.append('    ' + str(key) + ' ' + str(val))
         lines.append('')
         for filter in data.get('filters', []):
