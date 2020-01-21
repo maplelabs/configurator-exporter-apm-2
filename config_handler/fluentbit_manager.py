@@ -348,6 +348,7 @@ class FluentbitPluginManager:
         timefields = plugin.get('time_fields','')
         offset = plugin.get('add_offset','')
         logpath = plugin.get('log_path','')
+        toslog = False
         if not collection_type:
             collection_type = 'logger'
 
@@ -355,6 +356,8 @@ class FluentbitPluginManager:
         for key, val in data.get('input', {}).iteritems():
             if logpath and key == 'Path':
                 val = logpath
+            if key == 'Path' and 'tosbqa' in val:
+                toslog = True
             lines.append('    ' + str(key) + ' ' + str(val))
         lines.append('')
         for filter in data.get('filters', []):
@@ -406,7 +409,10 @@ class FluentbitPluginManager:
             for tag_key, tag_val in self.tags.items():
                 lines.append('    ' + 'Record'+ ' ' +'_tag_' + str(tag_key) + ' ' + str(tag_val))
         lines.append('    ' + 'Record'+ ' ' + '_documentType'+ ' ' + name)
-        lines.append('    ' + 'Record'+ ' ' + '_plugin'+ ' ' + name)
+        if toslog:
+            lines.append('    ' + 'Record'+ ' ' + '_plugin'+ ' ' + 'tos')
+        else:
+            lines.append('    ' + 'Record'+ ' ' + '_plugin'+ ' ' + name)
         lines.append('')
 
         for x_targets in self.targets:
