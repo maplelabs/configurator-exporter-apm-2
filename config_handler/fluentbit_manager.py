@@ -141,6 +141,7 @@ class FluentbitPluginManager:
             logpath = ui_config.get('log_paths','')
             logfilter = ui_config.get('filters',{}).get('level',[])
             ignorelines = ui_config.get('ignore_older_than','')
+            offset = ui_config.get('add_offset','')
 
         if ignorelines:
             if not(ignorelines[:-1].isdigit() and (ignorelines[-1:] == 'm' or ignorelines[-1:] == 'h' or ignorelines[-1:] == 'd')):
@@ -162,6 +163,8 @@ class FluentbitPluginManager:
 
         if ignorelines:
             lines.append('    ' + 'Ignore_Older' + ' ' + str(ignorelines))
+        if offset:
+            lines.append('    ' + 'Time_Offset' + ' ' + str(offset))
         lines.append('')
 
         for filter in data.get('filters', []):
@@ -199,7 +202,7 @@ class FluentbitPluginManager:
         lines.append('    ' + 'Name' + ' lua')
         lines.append('    ' + 'Match' + ' ' + str(data.get('name','')))
         lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
-        lines.append('    ' + 'call' + ' ' + 'addtimeGMToffset_millisecond')
+        lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
         lines.append('')
 
         #adding timestamp
@@ -359,6 +362,8 @@ class FluentbitPluginManager:
             if key == 'Path' and 'tosbqa' in val:
                 toslog = True
             lines.append('    ' + str(key) + ' ' + str(val))
+        if offset:
+            lines.append('    ' + 'Time_Offset' + ' ' + str(offset))
         lines.append('')
         for filter in data.get('filters', []):
             lines.append('[FILTER]')
@@ -370,10 +375,7 @@ class FluentbitPluginManager:
         lines.append('    ' + 'Name' + ' lua')
         lines.append('    ' + 'Match' + ' ' + name)
         lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
-        if offset == 'On':
-            lines.append('    ' + 'call' + ' ' + 'addtimeGMToffset_millisecond')
-        else:
-            lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
+        lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
         lines.append('')
 
         lines.append('[FILTER]')
