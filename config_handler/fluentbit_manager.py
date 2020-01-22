@@ -39,6 +39,7 @@ class FluentbitPluginManager:
 
         self.plugin_post_data, self.status = [], []
         self.custom_parsers = []
+        self.addon_parsers = []
         self.c_plugins = []
 
         # Initialize logger object
@@ -292,6 +293,15 @@ class FluentbitPluginManager:
                 lines.append('    ' + str(key) + ' ' + str(val))
             lines.append('    ' + "Time_Keep" + ' ' + "On")
             lines.append('')
+
+        for addonpar in self.addon_parsers:
+            lines.append('[PARSER]')
+            for key, val in addonpar.iteritems():
+                lines.append('    ' + 'Regex' + ' ' + str(val))
+                lines.append('    ' + 'Name' + ' ' + str(key))
+            lines.append('    ' + 'Format' + ' ' + 'regex')
+            lines.append('')
+
         filename = self.plugin_path + os.path.sep + 'parsers.conf'
         self.plugin_post_data.append((filename, '\n'.join(lines)))
         return True
@@ -351,6 +361,7 @@ class FluentbitPluginManager:
         timefields = plugin.get('time_fields','')
         offset = plugin.get('add_offset','')
         logpath = plugin.get('log_path','')
+        parsers = plugin.get('field_extracters',{}) 
         toslog = False
         if not collection_type:
             collection_type = 'logger'
@@ -369,6 +380,17 @@ class FluentbitPluginManager:
             lines.append('[FILTER]')
             for key, val in filter.iteritems():
                 lines.append('    ' + str(key) + ' ' + str(val))
+            lines.append('')
+
+        for key, val in parsers.iteritems():
+            self.addon_parsers.append({name+'_'+key:val})
+            lines.append('[FILTER]')
+            lines.append('    ' + 'Name' + ' ' + 'parser')
+            lines.append('    ' + 'Preserve_Key' + ' ' + 'On')
+            lines.append('    ' + 'Key_Name' + ' ' + 'message')
+            lines.append('    ' + 'Parser' + ' ' + name+'_'+key)
+            lines.append('    ' + 'Reserve_Data' + ' ' + 'On')
+            lines.append('    ' + 'Match' + ' ' + name)
             lines.append('')
 
         lines.append('[FILTER]')
