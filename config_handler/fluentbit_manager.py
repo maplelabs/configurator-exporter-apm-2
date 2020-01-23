@@ -202,7 +202,7 @@ class FluentbitPluginManager:
         lines.append('    ' + 'Name' + ' lua')
         lines.append('    ' + 'Match' + ' ' + str(data.get('name','')))
         lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
-        lines.append('    ' + 'call' + ' ' + 'addtimeGMToffset_millisecond')
+        lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
         lines.append('')
 
         #adding timestamp
@@ -366,9 +366,8 @@ class FluentbitPluginManager:
         numberfields = plugin.get('number_fields','')
         stringfields = plugin.get('string_fields','')
         timefields = plugin.get('time_fields','')
-        offset = plugin.get('add_offset','')
         logpath = plugin.get('log_path','')
-        parsers = plugin.get('field_extracters',{}) 
+        parsers = plugin.get('field_extractors',{}) 
         toslog = False
         if not collection_type:
             collection_type = 'logger'
@@ -402,10 +401,7 @@ class FluentbitPluginManager:
         lines.append('    ' + 'Name' + ' lua')
         lines.append('    ' + 'Match' + ' ' + name)
         lines.append('    ' + 'script' + ' ' + LUA_SCRIPTFILE)
-        if offset == 'On':
-            lines.append('    ' + 'call' + ' ' + 'addtimeGMToffset_millisecond')
-        else:
-            lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
+        lines.append('    ' + 'call' + ' ' + 'addtime_millisecond')
         lines.append('')
 
         lines.append('[FILTER]')
