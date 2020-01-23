@@ -11,38 +11,47 @@ parsers:
 - Name: nginx-access
   Format: regex
   Time_Key: time
+  Time_Offset: '0000'
   Time_format: '%d/%b/%Y:%H:%M:%S %z'
   Regex: '^(?<host>[^ ]*)\s(?<user>[^ ]*)\s\[(?<time>[^\]]*)\]\s\"(?<method>[^ ]*)\s(?<path>[^"]*)\s(?<header>[^ ]*)\"\s(?<code>[^ ]*)\s(?<size>[^ ]*)\s\"(?<referer>[^"]*)\"\s\"(?<agent>[^"]*)\"\s\"(?<referer2>[^"]*)\"\s(rt=(?<request_time>[^ ]*))\s(uct=(?<upstream_connect_time>[^ ]*))\s(uht=(?<upstream_header_time>[^ ]*))\s(urt=(?<upstream_response_time>[^ ]*))$'
 - Name: nginx-error
   Format: regex
   Time_Key: time
+  Time_Offset: '0000'
   Time_format: '%Y/%m/%d %H:%M:%S'
   Regex: '(?<time>[^ ]* [^ ]*)\s*\[(?<level>\S+)\]\s*(?<pid>\d+)#(?<tid>\d+)\:\s*(?<message>.*)$'
 - Name: mysql-error
   Format: regex
   Time_Key: time
+  Time_Offset: '0000'
   Time_format: '%Y-%m-%d %H:%M:%S'
   Regex: '(?<time>[^ ]* [^ ]*)\s*(?<id>\d*)\s*\[(?<level>\S+)\]\s(?<message>.*)$'
 - Name: mysql-general
   Format: regex
+  Time_Offset: '0000'
   Regex: '(?<event_time>[\d]+\s*[^\s]*)\s*(?<id>\d+)\s(?<command>[^\s]*)\s(?<argument>[^\t].*)$'
 - Name: mysql-slowquery
   Format: regex
+  Time_Offset: '0000'
   Regex: 'Time:\s(?<date>[^ ]+)\s+(?<message>\d{2}:\d{2}:\d{2})'
 - Name: apache-error
   Format: regex
+  Time_Offset: '0000'
   Regex: '^\[[^ ]* (?<time>[^\]]*)\] \[(?<level>[^\]]*)\](?: \[pid (?<pid>[^\]]*)\])?( \[client (?<client>[^\]]*)\])? (?<message>.*)$'
 - Name: apache-access
   Format: regex
   Time_Key: time
+  Time_Offset: '0000'
   Time_format: '%d/%b/%Y:%H:%M:%S %z'
   Regex: '^(?<host>[^ ]*) [^ ]* (?<user>[^ ]*) \[(?<time>[^\]]*)\] "(?<method>\S+)(?: +(?<path>[^\"]*?)(?: +\S*)?)?" (?<code>[^ ]*) (?<size>[^ ]*)(?: "(?<referer>[^\"]*)" "(?<agent>[^\"]*)")?$'
 - Name: linux-syslog
   Format: regex
   Regex: '(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[^:\[]*)(?:\[(?<pid>[0-9]+)\])?(?:[^\:]*\:)? (?<message>.*)'
   Time_Key: time
+  Time_Offset: '0000'
   Time_Keep: 'On'
   Time_Format: '%b %d %H:%M:%S'
 - Name: postgres-general
   Format: regex
+  Time_Offset: '0000'
   Regex: '(?<time>[\0-9\a-z]+) (?<level>[\a-z]+\: ) (?<message>.*)'

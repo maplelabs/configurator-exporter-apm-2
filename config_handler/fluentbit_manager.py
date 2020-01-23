@@ -41,6 +41,7 @@ class FluentbitPluginManager:
         self.custom_parsers = []
         self.addon_parsers = []
         self.c_plugins = []
+        self.offset = ''
 
         # Initialize logger object
         self.logger = expoter_logging(FLUENTBIT_MGR)
@@ -91,6 +92,7 @@ class FluentbitPluginManager:
     def configure_plugin_data(self):
         self.logger.info('Configuring the plugin data.')
         x_comp_plugins = list()
+        self.offset = self.logger_user_input.get('offset', '')
         for x_plugin in self.logger_user_input.get(PLUGINS, []):
             temp = dict()
             temp['source'] = {}
@@ -282,11 +284,19 @@ class FluentbitPluginManager:
         for parser in self.fluentbit_config.get('parsers', []):
             lines.append('[PARSER]')
             for key, val in parser.iteritems():
+                if key == 'Time_Offset':
+                    if self.offset:
+                        lines.append('    ' + str(key) + ' ' + str(self.offset))
+                    continue
                 lines.append('    ' + str(key) + ' ' + str(val))
             lines.append('')
         for par in self.custom_parsers:
             lines.append('[PARSER]')
             for key, val in par.iteritems():
+                if key == 'Time_Offset':
+                    if self.offset:
+                        lines.append('    ' + str(key) + ' ' + str(self.offset))
+                    continue
                 lines.append('    ' + str(key) + ' ' + str(val))
             lines.append('    ' + "Time_Keep" + ' ' + "On")
             lines.append('')
