@@ -367,7 +367,8 @@ class FluentbitPluginManager:
         stringfields = plugin.get('string_fields','')
         timefields = plugin.get('time_fields','')
         logpath = plugin.get('log_path','')
-        parsers = plugin.get('field_extractors',{}) 
+        parsers = plugin.get('field_extractors',{})
+        multiline = plugin.get('multiline','') 
         toslog = False
         if not collection_type:
             collection_type = 'logger'
@@ -378,6 +379,9 @@ class FluentbitPluginManager:
                 val = logpath
             if key == 'Path' and 'tosbqa' in val:
                 toslog = True
+            if multiline and key == 'Parser':
+                lines.append('    ' + 'Multiline' + ' ' + 'On')
+                key = 'Parser_Firstline'
             lines.append('    ' + str(key) + ' ' + str(val))
         lines.append('')
         for filter in data.get('filters', []):
