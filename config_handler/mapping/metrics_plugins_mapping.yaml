@@ -877,6 +877,34 @@ prometheusjmeter:
      label: Interval
      fieldName: interval
 
+# mapping for psstats plugin
+psstats:
+ - name: psstats
+   interval: 500
+   config:
+   - label: Number of processes to list
+     fieldName: num_processes
+     tooltip: Number of processes to list. '*' if all processes are to be listed.
+     Mandatory: true
+     dataType: String
+     defaultValue: '*'
+     min: ''
+     max: ''
+   - label: Sort By
+     fieldName: sort_by
+     tooltip: Utilization type based on which output of ps command is to be sorted
+     Mandatory: true
+     dataType: String
+     multiselect: false
+     defaultValue: 'CPU'
+     options:
+      - label: 'Sort by CPU percentage util'
+        value: 'CPU'
+      - label: 'Sort by MEM percentage  util'
+        value: 'MEM'
+     min: ''
+     max: ''
+
 #mapping for esa plugin
 #esalogstore:
 # - name: esalogstore
