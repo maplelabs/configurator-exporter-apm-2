@@ -377,8 +377,6 @@ class FluentbitPluginManager:
         for key, val in data.get('input', {}).iteritems():
             if logpath and key == 'Path':
                 val = logpath
-            if key == 'Path' and 'tosbqa' in val:
-                toslog = True
             if multiline and key == 'Parser':
                 lines.append('    ' + 'Multiline' + ' ' + 'On')
                 key = 'Parser_Firstline'
@@ -441,10 +439,7 @@ class FluentbitPluginManager:
             for tag_key, tag_val in self.tags.items():
                 lines.append('    ' + 'Record'+ ' ' +'_tag_' + str(tag_key) + ' ' + str(tag_val))
         lines.append('    ' + 'Record'+ ' ' + '_documentType'+ ' ' + name)
-        if toslog:
-            lines.append('    ' + 'Record'+ ' ' + '_plugin'+ ' ' + 'tos')
-        else:
-            lines.append('    ' + 'Record'+ ' ' + '_plugin'+ ' ' + name)
+        lines.append('    ' + 'Record'+ ' ' + '_plugin'+ ' ' + 'customlogs')
         lines.append('')
 
         for x_targets in self.targets:
