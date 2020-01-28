@@ -308,6 +308,13 @@ class FluentbitPluginManager:
                 lines.append('    ' + 'Name' + ' ' + str(key))
             lines.append('    ' + 'Format' + ' ' + 'regex')
             lines.append('')
+            
+        lines.append('[PARSER]')
+        lines.append('    ' + 'Regex' + ' ' + '^(?<mlmessage>.*)$')
+        lines.append('    ' + 'Name' + ' ' + 'mlmessage')
+        lines.append('    ' + 'Format' + ' ' + 'regex')
+        lines.append('    ' + 'Time_Keep' + ' ' + 'On')
+        lines.append('')
 
         filename = self.plugin_path + os.path.sep + 'parsers.conf'
         self.plugin_post_data.append((filename, '\n'.join(lines)))
@@ -380,6 +387,7 @@ class FluentbitPluginManager:
             if multiline and key == 'Parser':
                 lines.append('    ' + 'Multiline' + ' ' + 'On')
                 key = 'Parser_Firstline'
+                lines.append('    ' + 'Parser_1' + ' ' + 'mlmessage')
             lines.append('    ' + str(key) + ' ' + str(val))
         lines.append('')
         for filter in data.get('filters', []):
