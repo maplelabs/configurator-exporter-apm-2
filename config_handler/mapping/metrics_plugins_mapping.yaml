@@ -523,6 +523,11 @@ tpcc:
    - name: tpcc
      interval: 300
 
+# mapping for socketstats
+socketstats:
+  - name: socketstats
+    interval: 300
+
 #results of hxConnect
 hxconnect:
 - name: hxconnect
