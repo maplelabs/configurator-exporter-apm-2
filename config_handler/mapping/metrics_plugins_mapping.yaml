@@ -528,6 +528,11 @@ socketstats:
   - name: socketstats
     interval: 300
 
+# mapping for lsofstats
+lsofstats:
+  - name: lsofstats
+    interval: 6000
+
 #results of hxConnect
 hxconnect:
 - name: hxconnect
