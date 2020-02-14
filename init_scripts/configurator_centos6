@@ -13,7 +13,7 @@ dir="/opt/sfapm/configurator-exporter"
 cmd="/opt/sfapm/sfapm-venv/bin/python api_server.py"
 user=""
 
-name=`basename $0`
+name="configurator"
 pid_file="/var/run/$name.pid"
 stdout_log="/var/log/$name.log"
 stderr_log="/var/log/$name.err"
@@ -82,10 +82,11 @@ case "$1" in
     $0 start
     ;;
     status)
+    pidval=$(<"$pid_file")
     if is_running; then
-        echo "Running"
+        echo "Configurator with pid $pidval is Running"
     else
-        echo "Stopped"
+        echo "Configurator Stopped"
         exit 1
     fi
     ;;
